@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Invoice List{% endblock title %}
+
+{% block body %}
+
+    <div class="container">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Invoice Number</th>
+                    
+                    
+                    <th>Payment</th>
+                    
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders reversed %}
+                <tr>
+                    <td>{{ order.invoice_number }}</td>
+
+                    <td>{{ order.payment }}</td>
+                
+                    <td>{{ order.date }}</td>
+                    <td>{% if order.invoice_number %}
+                        <a href="{% url 'invoiceview' order.invoice_number %}">
+                            <button type="button" class="btn btn-danger btn-sm">View Invoice</button>
+                        </a>
+                    {% else %}
+                        <span>No invoice number available</span>
+                    {% endif %}
+                    </td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+   
+
+{% endblock body %}

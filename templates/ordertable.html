@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us{% endblock title %}
+
+{% block body %}
+
+
+    <div class="container">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Quantity</th>
+                    <th>Payment</th>
+                    <th>Delivery Status</th>
+                    <th>Date</th>
+                    <th>Order Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.order_id }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>{{ order.payment }}</td>
+                    <td>{{ order.delivery_status }}</td>
+                    <td>{{ order.date }}</td>
+                    <td>                               
+                        {% if order.delivery_status == 'delivered' %}
+                            <span class="text-success">&#10004; Delivered</span> <!-- Checkmark symbol -->
+                        {% elif order.delivery_status == 'cancelled' %}
+                            <span class="text-danger">&#10006; Cancelled </span><br> <!-- Cross symbol -->
+                            <small class="text-muted">You will be Refunded<br> within 3 days</small>
+                        {% else %}
+                            <form action="{% url 'cancel_order' order.id %}" method="POST" id="cancel-order-form">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="confirmCancelOrder({{ order.id }})">Cancel Order</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if order.delivery_status == 'cancelled' %}
+    <p> asjkldfj asjdlfk jasljf lsdjfl aj</p>
+    {% endif %}
+    <script>
+        function confirmCancelOrder(orderId) {
+            if (confirm("Are you sure you want to cancel this order?")) {
+                // If the user confirms the cancellation, submit the form
+                document.getElementById("cancel-order-form").submit();
+            }
+        }
+    </script>
+
+
+{% endblock body %}

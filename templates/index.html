@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %} Shukur Eggs Center {% endblock title %}
+
+
+{% block body %}
+<div class="container-fluid p-0">
+    <div id="header-carousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="w-100" src="static/carousel-2.jpg" alt="Image">
+                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                    <div class="p-3" style="max-width: 900px;">
+                        {% if user.is_anonymous %}
+                        <p class="display-4 text-white mb-md-0" >To Place your Order Login First !</p>
+                        <a  href="{% url 'register' %}" >Login</a>
+                        {% elif user.is_authenticated %}
+                        <p class="display-4 text-white mb-md-0" >Hello {{request.user.username}} ! You Can Place You Order</p>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+            </div>    
+    </div>
+</div>
+
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="container-fluid booking mt-5 pb-0">
+        <div class="container pb-5">
+            <div class="bg-light shadow" style="padding: 30px;">
+                <div class="row align-items-center" style="min-height: 60px;">
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="mb- mb-md-0">
+                                    <div class="date" id="date2" data-target-input="nearest">
+                                        <input type="number" class="form-control p-4 datetimepicker-input" id="quantity" name="quantity" placeholder="Eggs Quantity [1 tray(30eggs)]" data-target="#date2" data-toggle="" required/>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            <div class="col-md-4">
+                                <div class="mb-3 mb-md-0">
+                                    <div class="date" id="date2" data-target-input="nearest">
+                                        <input type="cal" class="form-control p-4 datetimepicker-input" id='address' name="address" placeholder="Enter your address" data-target="#date2" data-toggle=""required/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if user.is_authenticated %}
+                        {% if stock_available.Stock != 0 %}
+                            <div class="col-md-2">
+                                <button class="btn btn-primary btn-block" type="submit" style="height: 47px; margin-top: -2px;">Submit</button>
+                            </div>
+                        {% else %}
+                            <div class="col-md-2">
+                                <p style='color:red'>Out Of Stock</p>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'login' %}">Login To Buy</a>
+                    {% endif %}
+                </div>
+            </div> 
+        </div>
+    </div>
+          </form>
+          <h1 style='color:#b7572fe0; text-align:center;'>Available stock is {{stock_available.Stock}} </h1>
+            {% if messages %}
+              {% for message in messages %}
+                <h5  style='color:red;text-align:center; '>{{ message }}</h5>
+              {% endfor %}
+          {% endif %}
+        
+        
+
+{% endblock body %}
+
+
+
